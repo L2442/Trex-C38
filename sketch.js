@@ -86,7 +86,7 @@ function draw() {
       ground.x = 300;
     }
   
-    invisibleGround.collide(trex);
+    trex.collide(invisibleGround);
     spawnClouds();
     spawnObstacles();
   
