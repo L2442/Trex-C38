@@ -33,9 +33,16 @@ function setup() {
   trex = createSprite(50,180,20,50);
   trex.addImage(trexImg);
   trex.scale = 0.2;
-  trex.debug = true;
+  //trex.debug = true;
   trex.setCollider("rectangle",0,0,trex.width, trex.height-115);
-  
+
+  gameOver = createSprite();
+  gameOver.addImage(gameOverImg);
+  restart = createSprite();
+  restart.addImage(restartImg);
+  gameOver.scale = 0.5;
+  restart.scale = 0.5;
+
   ground = createSprite(300,180,400,20);
   ground.addImage("ground",groundImage);
   ground.x = ground.width /2;
@@ -59,7 +66,7 @@ function draw() {
     score = score + Math.round(getFrameRate()/60);
     //ground.velocityX = -(6 + 3*score/100);
     camera.position.x = trex.x+250;
-    camera.position.y = trex.y 
+    camera.position.y = trex.y;
   
     if(keyDown("space") && trex.y >= 100) {
       trex.velocityY = -15;
@@ -114,7 +121,7 @@ function draw() {
     trex.velocityY = trex.velocityY + 0.8;
   
     if (trex.x > ground.x){
-      ground.x = trex.x + ground.width/2-60;
+      ground.x = trex.x + ground.width/2-450;
     }
   
     trex.collide(ground);
@@ -126,17 +133,12 @@ function draw() {
     }
   }
   else if (gameState === END){
-    gameOver = createSprite(camera.position.x+50,camera.position.y);
-    gameOver.addImage(gameOverImg);
-    
-    restart = createSprite(camera.position.x+50,camera.position.y+30);
-    restart.addImage(restartImg);
-    
-    gameOver.visible = true;
-    restart.visible = true;
 
-    gameOver.scale = 0.5;
-    restart.scale = 0.5;
+    gameOver.x = camera.position.x;
+    restart.x = camera.position.x;
+    gameOver.y = camera.position.y-100;
+    restart.y = camera.position.y-50;
+
     
     //set velcity of each game object to 0
     trex.velocityX = 0;
@@ -148,15 +150,15 @@ function draw() {
     obstaclesGroup.setLifetimeEach(-1);
     cloudsGroup.setLifetimeEach(-1);
     
-    if(mousePressedOver(restart)) {
-      gameOver.destroy();
-      restart.destroy();
+    if(mousePressedOver(restart)){
       reset();
-      
+      /*gameOver.visible = false;
+      restart.visible = false;*/
     }
   }
   
-  
+  console.log(gameOver);
+  console.log(restart);
   drawSprites();
 }
 
@@ -187,7 +189,7 @@ function spawnObstacles() {
     var obstacle = createSprite(trex.x+width,165,10,40);
     //obstacle.debug = true;
     obstacle.setCollider("rectangle", 5,5,200,200);
-    obstacle.velocityX = -(7 + 3*score/100);
+    obstacle.velocityX = -(6 + 3*score/100);
     
     //generate random obstacles
     var rand = Math.round(random(1,3));
@@ -211,9 +213,8 @@ function spawnObstacles() {
 
 function reset(){
   gameState = PLAY;
-  /*gameOver.visible = false;
-  restart.visible = false;*/
-  
+  gameOver.destroy();
+  restart.destroy();
   obstaclesGroup.destroyEach();
   cloudsGroup.destroyEach();
   
