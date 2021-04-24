@@ -47,6 +47,8 @@ function setup() {
   ground.addImage("ground",groundImage);
   ground.x = ground.width /2;
   //ground.velocityX = -(6 + 3*score/100);
+
+
   
   cloudsGroup = new Group();
   obstaclesGroup = new Group();
@@ -63,6 +65,8 @@ function draw() {
   text("Score: "+ score, camera.position.x+300,camera.position.y-200);
   
   if (gameState===PLAY){
+    gameOver.visible = false;
+    restart.visible = false;
     score = score + Math.round(getFrameRate()/60);
     //ground.velocityX = -(6 + 3*score/100);
     camera.position.x = trex.x+250;
@@ -72,7 +76,7 @@ function draw() {
       trex.velocityY = -15;
     }
 
-    /*if(score > 500){
+    if(score > 500){
       background("black");
       fill("white");
       textSize(20);
@@ -115,7 +119,7 @@ function draw() {
       fill("black");
       textSize(20);
       text("Score: "+ score, camera.position.x+300,camera.position.y-200);
-    }*/
+    }
 
     trex.velocityX = (6 + 3*score/100);
     trex.velocityY = trex.velocityY + 0.8;
@@ -139,7 +143,9 @@ function draw() {
     gameOver.y = camera.position.y-100;
     restart.y = camera.position.y-50;
 
-    
+    gameOver.visible = true;
+    restart.visible = true;
+
     //set velcity of each game object to 0
     trex.velocityX = 0;
     trex.velocityY = 0;
@@ -152,13 +158,13 @@ function draw() {
     
     if(mousePressedOver(restart)){
       reset();
-      /*gameOver.visible = false;
+     /* gameOver.visible = false;
       restart.visible = false;*/
     }
   }
   
-  console.log(gameOver);
-  console.log(restart);
+  //console.log(gameOver);
+  //console.log(restart);
   drawSprites();
 }
 
@@ -213,8 +219,8 @@ function spawnObstacles() {
 
 function reset(){
   gameState = PLAY;
-  gameOver.destroy();
-  restart.destroy();
+  gameOver.visible = true;
+  restart.visible = true;
   obstaclesGroup.destroyEach();
   cloudsGroup.destroyEach();
   
@@ -223,6 +229,5 @@ function reset(){
   }
   console.log(localStorage["HighestScore"]);
   
-  score = 0;
-  
+  score = 0; 
 }
